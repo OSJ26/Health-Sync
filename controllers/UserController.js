@@ -1,0 +1,34 @@
+// Import the User model
+const User = require("../models/User");
+
+// Create class to handle user operations
+class UserController {
+  // Method to return profile of currently authenticated user
+  async getCurrentUser(req, res) {
+    try {
+      // Extract user ID from token (added by auth middleware)
+      const userId = req.user.id;
+
+      // Query the DB to fetch the user's full document
+      const user = await User.findById(userId).select("-password"); // exclude password
+
+      // If user not found (edge case)
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Return profile
+      res.status(200).json({
+        message: "User profile fetched successfully",
+        user
+      });
+
+    } catch (error) {
+      console.error("User fetch error:", error.message);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+}
+
+// Export the class instance
+module.exports = new UserController();
