@@ -24,7 +24,7 @@ class AuthController {
         ).required().messages({
           'string.pattern.base': "Password must be at least 12 characters long, include 1 uppercase letter and 1 special character",
           'any.required': "Password is required"
-        })
+        }),
         phone: Joi.string().pattern(/^[0-9]{10}$/).required().messages({
           'string.pattern.base': "Phone number must be exactly 10 digits",
           'any.required': "Phone number is required"
