@@ -30,7 +30,8 @@ const userSchema = new mongoose.Schema({
   type: String,
   required: function () {
     return this.role === "D"; // Only required for doctors
-  }
+  },
+  phone: { type: String, required: true }, // ✅ Added phone field
 },
 phone: {
   type: String,
