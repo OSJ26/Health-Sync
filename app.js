@@ -28,11 +28,12 @@ app.use(express.json());
 // Use /api/auth for all auth-related routes
 const userRoutes = require("./routes/userRoutes"); // <- you'll create this soon
 const adminRoutes = require("./routes/adminRoutes");
+const appointmentRoutes = require('./routes/appointmentRoutes');
 
 // Register all routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes); // protected routes
 app.use("/api/admin", adminRoutes);
-
+app.use('/appointments', appointmentRoutes);
 // Export app for use in server.js
 module.exports = app;

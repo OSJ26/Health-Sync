@@ -9,6 +9,8 @@ const AuthController = require("../controllers/AuthController");
 router.post("/register", AuthController.registerUser);
 // Login route
 router.post("/login", AuthController.loginUser);
+// Forgot Password route
+router.post('/forgot-password', AuthController.forgotPassword);
 
 
 // Export router for use in main app

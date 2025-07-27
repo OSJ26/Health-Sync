@@ -70,63 +70,81 @@ class AuthController {
   }
 
   // Inside AuthController class
-async loginUser(req, res) {
-  try {
-    // Step 1: Validate login input
-    const schema = Joi.object({
-      email: Joi.string().email().required().messages({
-        'string.email': "Enter a valid email",
-        'any.required': "Email is required"
-      }),
-      password: Joi.string().required().messages({
-        'any.required': "Password is required"
-      })
-    });
+  async loginUser(req, res) {
+    try {
+      // Step 1: Validate login input
+      const schema = Joi.object({
+        email: Joi.string().email().required().messages({
+          'string.email': "Enter a valid email",
+          'any.required': "Email is required"
+        }),
+        password: Joi.string().required().messages({
+          'any.required': "Password is required"
+        })
+      });
 
-    // Step 2: Run validation
-    const { error } = schema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }
-
-    const { email, password } = req.body;
-
-    // Step 3: Check if user exists
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Step 4: Compare password using bcrypt
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    // Step 5: Generate JWT token
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" } // Token is valid for 7 days
-    );
-
-    // Step 6: Send success response with token and basic user info
-    res.status(200).json({
-      message: "Login successful",
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
+      // Step 2: Run validation
+      const { error } = schema.validate(req.body);
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
       }
-    });
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+      const { email, password } = req.body;
+
+      // Step 3: Check if user exists
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Step 4: Compare password using bcrypt
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      // Step 5: Generate JWT token
+      const token = jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" } // Token is valid for 7 days
+      );
+
+      // Step 6: Send success response with token and basic user info
+      res.status(200).json({
+        message: "Login successful",
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }
+      });
+
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
-}
+
+  async forgotPassword(req, res) {
+    try {
+      const { email, newPassword } = req.body;
+
+      const user = await User.findOne({ email });
+      if (!user) throw new Error("User not found with this email");
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      await user.save();
+      return res.status(200).json({ message: "Password updated successfully" });
+    } catch (error) {
+      console.error("Forgot Password Error:", error);
+      return res.status(400).json({ message: "Something went wrong" });
+    }
+  };
+
 
 }
 
