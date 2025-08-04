@@ -28,6 +28,18 @@ class UserController {
       res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  async getDoctors(req, res) {
+    try {
+      const doctors = await User.find({ role: 'D' }, 'name specialization phone');
+      return res.status(200).json(doctors);
+    } catch (err) {
+      return res.status(500).json({
+        message: 'Failed to fetch doctors',
+        error: err.message,
+      });
+    }
+  }
 }
 
 // Export the class instance

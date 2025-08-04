@@ -9,6 +9,7 @@ const authorizeRoles = require("../middlewares/roleMiddleware");
 // Import the User model to fetch user info from DB
 const User = require("../models/User");
 const AdminController = require("../controllers/AdminController");
+const UserController = require("../controllers/UserController");
 
 // ✅ GET /api/users/me - returns current user's profile
 router.get("/me", authenticate, async (req, res) => {
@@ -38,5 +39,5 @@ router.get("/admin-only", authenticate, authorizeRoles("A"), (req, res) => {
 });
 
 router.post("/add-doctor", authenticate, authorizeRoles("A"), AdminController.addDoctor);
-
+router.get('/doctors', UserController.getDoctors);
 module.exports = router;
