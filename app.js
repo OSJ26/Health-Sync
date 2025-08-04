@@ -34,6 +34,6 @@ const appointmentRoutes = require('./routes/appointmentRoutes');
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes); // protected routes
 app.use("/api/admin", adminRoutes);
-app.use('/appointments', appointmentRoutes);
+app.use('/api/appointments', appointmentRoutes);
 // Export app for use in server.js
 module.exports = app;
