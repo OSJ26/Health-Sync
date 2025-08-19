@@ -65,6 +65,25 @@ class AdminController {
             res.status(500).json({ error: "Server error while adding doctor" });
         }
     }
+
+    async getCounts(req, res) {
+    try {
+      const totalDoctors = await User.countDocuments({ role: "D" });
+      const totalPatients = await User.countDocuments({ role: "U" }); // Patients only
+      const totalAppointments = 0;//await Appointment.countDocuments();
+
+      res.status(200).json({
+        success: true,
+        data: {
+          totalDoctors,
+          totalPatients,
+          totalAppointments
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Error fetching counts", error });
+    }
+  }
 }
 
 // Export instance

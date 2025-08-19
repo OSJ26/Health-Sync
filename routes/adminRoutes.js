@@ -16,5 +16,6 @@ router.post(
   authorizeRoles("A"), // Only admins can access
   AdminController.addDoctor
 );
+router.get("/counts", AdminController.getCounts);
 
 module.exports = router;

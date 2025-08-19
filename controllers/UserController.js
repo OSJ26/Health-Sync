@@ -40,6 +40,24 @@ class UserController {
       });
     }
   }
+
+  async getPrescriptionsByUser(userId) {
+    try {
+      // Validate userId
+      if (!userId) {
+        throw new Error("User ID is required");
+      }
+
+      // Fetch prescriptions
+      const prescriptions = await Prescription.find({ patientId: userId })
+        .populate("doctorId", "name email") // show doctor's name/email
+        .sort({ createdAt: -1 });
+
+      return prescriptions;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 // Export the class instance
