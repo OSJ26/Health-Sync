@@ -22,6 +22,7 @@ const bookAppointment = async (req, res) => {
 
     const appointment = new Appointment({
       patientId,
+      patientName,
       doctorId,
       date,
       timeSlot,
