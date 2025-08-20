@@ -41,4 +41,5 @@ router.get("/admin-only", authenticate, authorizeRoles("A"), (req, res) => {
 router.post("/add-doctor", authenticate, authorizeRoles("A"), AdminController.addDoctor);
 router.get('/doctors', UserController.getDoctors);
 router.get('/prescriptions/:userId', UserController.getPrescriptionsByUser);
+router.get("/all", UserController.getAllUsers);
 module.exports = router;

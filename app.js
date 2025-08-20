@@ -29,11 +29,14 @@ app.use(express.json());
 const userRoutes = require("./routes/userRoutes"); // <- you'll create this soon
 const adminRoutes = require("./routes/adminRoutes");
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const prescriptionRoutes = require('./routes/PrescriptionRoutes');
 
 // Register all routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes); // protected routes
 app.use("/api/admin", adminRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use("/api/prescriptions", prescriptionRoutes);
+
 // Export app for use in server.js
 module.exports = app;

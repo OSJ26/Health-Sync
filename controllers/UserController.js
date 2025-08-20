@@ -58,6 +58,15 @@ class UserController {
       throw error;
     }
   }
+
+  async getAllUsers(req, res) {
+    try {
+      const users = await User.find({ role: "U" }).select("_id name email");
+      res.status(200).json({ success: true, data: users });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
 }
 
 // Export the class instance

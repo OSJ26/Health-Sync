@@ -116,12 +116,9 @@ const getUserAppointments = async (req, res) => {
 // Get Appointments by Doctor
 const getDoctorAppointments = async (req, res) => {
   try {
-    const { doctorId, date } = req.query;
+    const { doctorId } = req.query;
 
     const query = { doctorId };
-    if (date) {
-      query.date = date;
-    }
 
     const appointments = await Appointment.find(query).sort({ timeSlot: 1 });
 
