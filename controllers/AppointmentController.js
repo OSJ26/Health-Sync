@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 // Book Appointment
 const bookAppointment = async (req, res) => {
   try {
-    const { patientId, doctorId, date, timeSlot } = req.body;
+    const { patientId, patientName, doctorId, date, timeSlot } = req.body;
 
     // Check if slot is already booked
     const existing = await Appointment.findOne({
