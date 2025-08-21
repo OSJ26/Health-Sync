@@ -15,7 +15,7 @@ class PrescriptionController {
         return res.status(404).json({ success: false, message: "Appointment not found" });
       }
 
-      const doctor = await User.findById(doctorId);
+      const doctor = await user.findById(doctorId);
       if (!doctor || doctor.role !== 'D') {
         return res.status(400).json({ success: false, message: "Invalid doctor" });
       }
