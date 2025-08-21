@@ -49,7 +49,7 @@ class PrescriptionController {
     const { doctorId } = req.params;
 
     // Find prescriptions by doctorId
-    const prescriptions = await Prescription.find({ doctorId });
+    const prescriptions = await Prescription.find({ doctorId }).populate("appointmentId");
 
     if (!prescriptions || prescriptions.length === 0) {
       return res.status(404).json({ message: "No prescriptions found for this doctor" });
