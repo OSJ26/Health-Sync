@@ -5,6 +5,8 @@ const prescriptionController = require("../controllers/PrescriptionController");
 
 // POST: Add new prescription
 router.post("/addPrescription", prescriptionController.addPrescription);
-router.get("/:id", prescriptionController.getPrescriptionsByDoctor);
+router.get("/doctor/:doctorId", prescriptionController.getPrescriptionsByDoctorId);
 router.get("/patient/:patientId/prescriptions", prescriptionController.getPrescriptionsByPatient);
+//router.get("/doctor/:doctorId", prescriptionController.getPrescriptionsByDoctorId);
+
 module.exports = router;

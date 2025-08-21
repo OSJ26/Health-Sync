@@ -20,11 +20,17 @@ class PrescriptionController {
         return res.status(400).json({ success: false, message: "Invalid doctor" });
       }
 
+      const patient = await user.findById(appointment.patientId);
+      if (!patient || patient.role !== 'U') {
+        return res.status(400).json({ success: false, message: "Invalid Patient" });
+      }
+
       // Create prescription
       const newPrescription = new Prescription({
         doctorId,
         patientId: appointment.patientId,
-        doctorName: doctor.name, 
+        doctorName: doctor.name,
+        patientName: patient.name, 
         appointmentId,
         prescription
       });
@@ -38,15 +44,22 @@ class PrescriptionController {
   }
 
   // Get prescriptions by doctor
-  async getPrescriptionsByDoctor(req, res) {
-    try {
-      const { doctorId } = req.params;
-      const prescriptions = await Prescription.find({ doctorId }).populate("patientId appointmentId");
-      res.status(200).json({ success: true, data: prescriptions });
-    } catch (error) {
-      res.status(500).json({ success: false, message: "Server error", error: error.message });
+  async getPrescriptionsByDoctorId(req, res) {
+  try {
+    const { doctorId } = req.params;
+
+    // Find prescriptions by doctorId
+    const prescriptions = await Prescription.find({ doctorId });
+
+    if (!prescriptions || prescriptions.length === 0) {
+      return res.status(404).json({ message: "No prescriptions found for this doctor" });
     }
+
+    res.status(200).json(prescriptions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
   async getPrescriptionsByPatient(req, res) {
   try {
