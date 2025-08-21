@@ -21,6 +21,7 @@ class AdminController {
                     'string.pattern.base': "Phone must be 10 digits"
                 }),
                 availableDays: Joi.array().items(
+                    
                     Joi.string().valid("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
                 ).min(1).required().messages({
                     'any.required': "At least one available day is required"
