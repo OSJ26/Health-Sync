@@ -8,6 +8,7 @@ const reportSchema = new mongoose.Schema({
   doctorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   fileUrl: { type: String, required: true },
   uploadedAt: { type: Date, default: Date.now },
+  reportName: {type: String,default: ""}
 });
 
 module.exports = mongoose.model("Report", reportSchema);

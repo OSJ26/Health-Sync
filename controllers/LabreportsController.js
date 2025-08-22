@@ -50,6 +50,7 @@ console.log("📤 Uploading report for:", { userId, doctorId });
         doctorName: doctor.name,
         userId,
         doctorId,
+        reportName,
         fileUrl: req.file?.path || req.file?.secure_url,
         uploadedAt: new Date(),
       });
