@@ -42,4 +42,6 @@ router.post("/add-doctor", authenticate, authorizeRoles("A"), AdminController.ad
 router.get('/doctors', UserController.getDoctors);
 router.get('/prescriptions/:userId', UserController.getPrescriptionsByUser);
 router.get("/all", UserController.getAllUsers);
+router.get("/getUserById/:id", UserController.getProfileById);
+router.put("/updateDetails/:id", UserController.updateProfile);
 module.exports = router;
