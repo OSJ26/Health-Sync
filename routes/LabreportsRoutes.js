@@ -52,7 +52,7 @@ const upload = multer({ storage });
 
 // Upload API
 router.post("/upload", upload.single("report"), ReportController.uploadReport);
-router.get("/reports", ReportController.getLabReports);
+router.post("/reports", ReportController.getReportsByRole);
 
 module.exports = router;
 

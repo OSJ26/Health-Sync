@@ -68,23 +68,47 @@ class ReportController {
 
   }
 
-  static async getLabReports(req, res) {
-    try {
-      const reports = await Report.find().sort({ uploadedAt: -1 });
-      res.json({
-        success: true,
-        count: reports.length,
-        data: reports,
-      });
-    } catch (error) {
-      console.error("Fetch error:", error);
-      res.status(500).json({
+  static async getReportsByRole(req, res) {
+  try {
+    const { id, role } = req.body;
+
+    if (!id || !role) {
+      return res.status(400).json({
         success: false,
-        message: "Error fetching reports",
-        error: error.message,
+        message: "Missing id or role parameter",
       });
     }
+
+    let filter = {};
+
+    if (role === "U") {
+      filter = { userId: id };
+    } else if (role === "D") {
+      filter = { doctorId: id };
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid role. Must be 'user' or 'doctor'",
+      });
+    }
+
+    const reports = await Report.find(filter).sort({ uploadedAt: -1 });
+
+    res.json({
+      success: true,
+      count: reports.length,
+      data: reports,
+    });
+  } catch (error) {
+    console.error("Error fetching reports by role:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
   }
+}
+
 }
 
 module.exports = ReportController;
