@@ -14,16 +14,13 @@ class ReportController {
     try {
         console.log(req);
       const { userId, doctorId } = req.body;
-    
-      console.log("Request body:", req.body);
-      console.log("Uploaded file:", req.file);
-
-      console.log("📦 File Info:", req.file);
-console.log("📤 Uploading report for:", { userId, doctorId });
-
 
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      if(reportName == ""){
+        return res.status(400).json({message: "Report Name Required"});
       }
 
       // Find doctor
@@ -50,7 +47,6 @@ console.log("📤 Uploading report for:", { userId, doctorId });
         doctorName: doctor.name,
         userId,
         doctorId,
-        reportName,
         fileUrl: req.file?.path || req.file?.secure_url,
         uploadedAt: new Date(),
       });
