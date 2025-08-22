@@ -19,10 +19,6 @@ class ReportController {
         return res.status(400).json({ message: "No file uploaded" });
       }
 
-      if(reportName == ""){
-        return res.status(400).json({message: "Report Name Required"});
-      }
-
       // Find doctor
       const doctor = await User.findById(doctorId);
       if (!doctor) {
