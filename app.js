@@ -39,6 +39,6 @@ app.use("/api/admin", adminRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use("/api/prescriptions", prescriptionRoutes);
 app.use("/api/reports", reportRoutes);
-
+app.use("/tmp", express.static("/tmp"));
 // Export app for use in server.js
 module.exports = app;

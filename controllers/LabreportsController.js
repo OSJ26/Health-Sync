@@ -27,7 +27,7 @@ class ReportController {
         doctorName: doctor.name,
         userId,
         doctorId,
-        fileUrl: `/uploads/${req.file.filename}`,
+        fileUrl: `tmp/${req.file.filename}`,
         uploadedAt: new Date(),
       });
 
