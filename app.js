@@ -30,6 +30,7 @@ const userRoutes = require("./routes/userRoutes"); // <- you'll create this soon
 const adminRoutes = require("./routes/adminRoutes");
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const prescriptionRoutes = require('./routes/PrescriptionRoutes');
+const reportRoutes = require('./routes/LabreportsRoutes');
 
 // Register all routes
 app.use("/api/auth", authRoutes);
@@ -37,6 +38,7 @@ app.use("/api/users", userRoutes); // protected routes
 app.use("/api/admin", adminRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use("/api/prescriptions", prescriptionRoutes);
+app.use("/api/reports", reportRoutes);
 
 // Export app for use in server.js
 module.exports = app;
