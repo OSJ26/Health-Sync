@@ -22,6 +22,13 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.error("❌ MongoDB connection error:", err);
 });
 
+console.log("Cloudinary Config:", {
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET ? "loaded" : "missing",
+});
+
+
 // Use JSON parser middleware
 app.use(express.json());
 

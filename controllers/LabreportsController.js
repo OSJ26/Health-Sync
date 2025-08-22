@@ -1,33 +1,56 @@
-// controllers/reportController.js
 const Report = require("../models/Labreports");
 const User = require("../models/User");
+const cloudinary = require("cloudinary").v2;
+
+// Cloudinary config (make sure your .env has these values)
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 class ReportController {
   static async uploadReport(req, res) {
     try {
+        console.log(req);
       const { userId, doctorId } = req.body;
+    
+      console.log("Request body:", req.body);
+      console.log("Uploaded file:", req.file);
+
+      console.log("📦 File Info:", req.file);
+console.log("📤 Uploading report for:", { userId, doctorId });
+
 
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
       }
 
+      // Find doctor
       const doctor = await User.findById(doctorId);
-          if (!doctor) {
-            return res.status(404).json({ message: 'Doctor Name Not Found' });
-          }
+      if (!doctor) {
+        return res.status(404).json({ message: "Doctor not found" });
+      }
 
-        const user = await User.findById(userId);
-          if (!doctor) {
-            return res.status(404).json({ message: 'User Name Not Found' });
-          }
+      // Find user
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-      // Save report entry in DB
+      // Upload to Cloudinary
+    //   const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+    //     folder: "reports", // creates "reports" folder in Cloudinary
+    //     resource_type: "auto", // supports images, pdf, docs, etc.
+    //   });
+
+      // Save report entry in DB with Cloudinary URL
       const newReport = new Report({
         userName: user.name,
         doctorName: doctor.name,
         userId,
         doctorId,
-        fileUrl: `tmp/${req.file.filename}`,
+        fileUrl: req.file?.path || req.file?.secure_url,
         uploadedAt: new Date(),
       });
 
@@ -38,43 +61,33 @@ class ReportController {
         data: newReport,
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error uploading report" });
+        console.error("Upload error:", error); // logs full object in server console
+        res.status(500).json({
+            message: "Error uploading report",
+            error: error, // return full error
+            stack: error.stack, // shows stack trace
+        });
     }
+
   }
 
-   static async getLabReports(req, res) {
-        try {
-            const { userId, doctorId } = req.query; // Read query params
-
-            let filter = {};
-            if (userId) {
-                filter.userId = userId; // If user
-            } else if (doctorId) {
-                filter.doctorId = doctorId; // If doctor
-            } else {
-                return res.status(400).json({
-                    message: "Either patientId or doctorId is required"
-                });
-            }
-
-            // Fetch lab reports from DB
-            const reports = await Report.find(filter);
-
-            res.status(200).json({
-                success: true,
-                data: reports
-            });
-
-        } catch (error) {
-            console.error("Error fetching lab reports:", error);
-            res.status(500).json({
-                success: false,
-                message: "Server error",
-                error: error.message
-            });
-        }
+  static async getLabReports(req, res) {
+    try {
+      const reports = await Report.find().sort({ uploadedAt: -1 });
+      res.json({
+        success: true,
+        count: reports.length,
+        data: reports,
+      });
+    } catch (error) {
+      console.error("Fetch error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Error fetching reports",
+        error: error.message,
+      });
     }
+  }
 }
 
 module.exports = ReportController;
