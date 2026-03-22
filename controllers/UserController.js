@@ -61,13 +61,18 @@ class UserController {
   }
 
   async getAllUsers(req, res) {
-    try {
-      const users = await User.find({ role: "U" }).select("_id name email");
-      res.status(200).json({ success: true, data: users });
-    } catch (error) {
-      res.status(500).json({ success: false, message: error.message });
-    }
+  try {
+    // ← removed { role: "U" } filter — return ALL users so
+    // the Flutter screen can filter by role client-side
+    const users = await User.find({})
+      .select("_id name email role specialization phone")
+      .sort({ createdAt: -1 }); // newest first
+ 
+    res.status(200).json({ success: true, data: users });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
+}
 
   async getProfileById(req, res) {
     try {
